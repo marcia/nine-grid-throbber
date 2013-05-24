@@ -1,0 +1,311 @@
+/**
+ * Styles for a throbber made from a 9-block grid.
+ * -------------
+ * | 0 | 1 | 2 |
+ * | 7 | 8 | 3 |
+ * | 6 | 5 | 4 |
+ * -------------
+ * The result of all these animations is to have a dark blue block
+ * (@blue) move clockwise from numbers 0 through 7, with a light
+ * blue block (@lightBlue) trailing it. It makes one full cycle every
+ * second, with the other blocks at @gray.
+ */
+
+@blue: #0080c9;
+@lightBlue: lighten(@blue, 40%);
+@gray: #ddd;
+@lightGray: #f7f7f7;
+@white: #fff;
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+.throbber-row {
+    margin: auto;
+    width: 100px;
+}
+.throbber-block {
+    // Nothing too crazy yet! We have a bunch of gray blocks in a grid
+    background: @gray;
+    border-right: 2px solid @white;
+    border-bottom: 2px solid @white;
+    float: left;
+    height: 30px;
+    width: 30px;
+
+    // Our animation should take 1 second
+    -webkit-animation-duration: 1s;
+
+    // and it should repeat to infinity and beyond!
+    -webkit-animation-iteration-count: infinite;
+
+    // Then we copy and paste it with the -moz and no prefix because browsers
+    // are silly creatures seeking individuality.
+    -moz-animation-duration: 1s;
+    -moz-animation-iteration-count: infinite;
+
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+// Remember that each block has a class from .block-0 to .block-8
+// The center one (.block-8) stays @lightGray the entire time
+.block-8 {
+    background: @lightGray;
+}
+
+// We'll give the other blocks its own special animation
+.blockMixin(@number) {
+    .block-@{number} {
+        -webkit-animation-name: ~"block@{number}";
+        -moz-animation-name: ~"block@{number}";
+        animation-name: ~"block@{number}";
+    }
+}
+.blockMixin(0);
+.blockMixin(1);
+.blockMixin(2);
+.blockMixin(3);
+.blockMixin(4);
+.blockMixin(5);
+.blockMixin(6);
+.blockMixin(7);
+
+/* Webkit keyframes */
+// Since the bright blue has to make its way around 8 blocks in 1 cycle, it
+// spends 1/8 of each cycle on each block.
+@-webkit-keyframes block0 {
+    // The blue starts off the cycle on block0
+    0% { background: @blue; }
+
+    // At the next 1/8, the blue has moved on to block1, with its light blue
+    // trail on block 0
+    12.5% { background: @lightBlue; }
+
+    // From here until we loop back around, block 0 is gray
+    25% { background: @gray; }
+    87.5% { background: @gray; }
+    100% { background: @blue; }
+}
+
+@-webkit-keyframes block1 {
+    // We start gray...
+    0% { background: @gray; }
+
+    // and then we turn blue at the next tick
+    12.5% { background: @blue; }
+
+    // and at the following tick we have the trailing light blue
+    25% { background: @lightBlue; }
+
+    // and then we return to our normal gray
+    37.5% { background: @gray; }
+}
+@-webkit-keyframes block2 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @blue; }
+    37.5% { background: @lightBlue; }
+    50% { background: @gray; }
+}
+@-webkit-keyframes block3 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @blue; }
+    50% { background: @lightBlue; }
+    62.5% { background: @gray; }
+}
+@-webkit-keyframes block4 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @blue; }
+    62.5% { background: @lightBlue; }
+    75% { background: @gray; }
+}
+@-webkit-keyframes block5 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @gray; }
+    62.5% { background: @blue; }
+    75% { background: @lightBlue; }
+    87.5% { background: @gray; }
+}
+@-webkit-keyframes block6 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @gray; }
+    62.5% { background: @gray; }
+    75% { background: @blue; }
+    87.5% { background: @lightBlue; }
+    100% { background: @gray; }
+}
+@-webkit-keyframes block7 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @gray; }
+    62.5% { background: @gray; }
+    75% { background: @gray; }
+    87.5% { background: @blue; }
+    100% { background: @lightBlue; }
+}
+
+/* Moz keyframes, more copy and pasting... */
+@-moz-keyframes block0 {
+    0% { background: @blue; }
+    12.5% { background: @lightBlue; }
+    25% { background: @gray; }
+    87.5% { background: @gray; }
+    100% { background: @blue; }
+}
+@-moz-keyframes block1 {
+    0% { background: @gray; }
+    12.5% { background: @blue; }
+    25% { background: @lightBlue; }
+    37.5% { background: @gray; }
+}
+@-moz-keyframes block2 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @blue; }
+    37.5% { background: @lightBlue; }
+    50% { background: @gray; }
+}
+@-moz-keyframes block3 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @blue; }
+    50% { background: @lightBlue; }
+    62.5% { background: @gray; }
+}
+@-moz-keyframes block4 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @blue; }
+    62.5% { background: @lightBlue; }
+    75% { background: @gray; }
+}
+@-moz-keyframes block5 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @gray; }
+    62.5% { background: @blue; }
+    75% { background: @lightBlue; }
+    87.5% { background: @gray; }
+}
+@-moz-keyframes block6 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @gray; }
+    62.5% { background: @gray; }
+    75% { background: @blue; }
+    87.5% { background: @lightBlue; }
+    100% { background: @gray; }
+}
+@-moz-keyframes block7 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @gray; }
+    62.5% { background: @gray; }
+    75% { background: @gray; }
+    87.5% { background: @blue; }
+    100% { background: @lightBlue; }
+}
+
+/* Keyframes, last bit of copy and pasting... */
+@keyframes block0 {
+    0% { background: @blue; }
+    12.5% { background: @lightBlue; }
+    25% { background: @gray; }
+    87.5% { background: @gray; }
+    100% { background: @blue; }
+}
+@keyframes block1 {
+    0% { background: @gray; }
+    12.5% { background: @blue; }
+    25% { background: @lightBlue; }
+    37.5% { background: @gray; }
+}
+@keyframes block2 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @blue; }
+    37.5% { background: @lightBlue; }
+    50% { background: @gray; }
+}
+@keyframes block3 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @blue; }
+    50% { background: @lightBlue; }
+    62.5% { background: @gray; }
+}
+@keyframes block4 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @blue; }
+    62.5% { background: @lightBlue; }
+    75% { background: @gray; }
+}
+@keyframes block5 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @gray; }
+    62.5% { background: @blue; }
+    75% { background: @lightBlue; }
+    87.5% { background: @gray; }
+}
+@keyframes block6 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @gray; }
+    62.5% { background: @gray; }
+    75% { background: @blue; }
+    87.5% { background: @lightBlue; }
+    100% { background: @gray; }
+}
+@keyframes block7 {
+    0% { background: @gray; }
+    12.5% { background: @gray; }
+    25% { background: @gray; }
+    37.5% { background: @gray; }
+    50% { background: @gray; }
+    62.5% { background: @gray; }
+    75% { background: @gray; }
+    87.5% { background: @blue; }
+    100% { background: @lightBlue; }
+}
